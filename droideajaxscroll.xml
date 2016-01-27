@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0.0" type="plugin" group="system" method="upgrade">
+	<name>droideajaxscroll_NAME</name>
+	<creationDate>Abril 2015</creationDate>
+	<author>André Luiz</author>
+	<authorEmail>and4563@gmail.com</authorEmail>
+	<authorUrl>www.next4.com.br</authorUrl>
+	<copyright>Copyright (C) 2015 André Luiz Pereira. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<version>1.0.0</version>
+	<description>
+		droideajaxscroll_DESC
+	</description>
+	<files>
+		<filename plugin="droideajaxscroll">droideajaxscroll.php</filename>
+        <filename>index.html</filename>
+        <filename>helper.php</filename>
+        <folder>language</folder>
+        <folder>js</folder>
+        <folder>tmpl</folder>
+	</files>
+  <media folder="media" destination="plg_system_droideajaxscroll">
+            <folder>assets</folder>
+        </media>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_system_droideajaxscroll.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_system_droideajaxscroll.sys.ini</language>
+        <language tag="pt-BR">pt-BR/pt-BR.plg_system_droideajaxscroll.ini</language>
+        <language tag="pt-BR">pt-BR/pt-BR.plg_system_droideajaxscroll.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+              <field name="load" label="droideajaxscroll_IMG" type="media" directory="" />
+              <field name="blocoparam" type="text" default="[data-next4-scroll]" label="droideajaxscroll_PARAM" description="droideajaxscroll_DESC_PARAM" size="10" />
+
+              <field name="layoutbloco" type="filelist" default="" label="droideajaxscroll_DESC_LAYOUT" description="droideajaxscroll_DESC_DESC_L" directory="plugins/system/droideajaxscroll/tmpl" filter="" exclude="" stripext="true" />
+                <field name="categorias"
+                  type="Repeatable"
+                  icon="list"
+                  description="droideajaxscroll_DESC_CAT"
+                  label="droideajaxscroll_LABEL_CAT"
+                  default="">
+                  <fields name="params">
+                  <fieldset hidden="true" name="categorias_modal" repeat="true">
+                    <field name="categoria" type="category" extension="com_content" label="droideajaxscroll_SUB_CAT" description="" />
+                  </fieldset>
+                  </fields>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
