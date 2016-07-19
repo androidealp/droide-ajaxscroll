@@ -18,9 +18,9 @@ class PlgSystemDroideajaxscroll extends JPlugin
 
  public function onBeforeRender()
 	 {
-		
+
 		$app = JFactory::getApplication();
-		
+
 
 		if($app->isAdmin()) {
 		    return;
@@ -41,29 +41,31 @@ class PlgSystemDroideajaxscroll extends JPlugin
 
 		$menus = $app->getMenu()->getActive();
 
-		
+
 
 		$elementos_dinamicos = array();
 
-		
+
 		$dataTransf = array(
 			'menuparans'=>$menus->params,
 			'blocoparam'=>$this->params->get('blocoparam'),
 			'art_limit'=>($menus->params->get('num_intro_articles'))?$menus->params->get('num_intro_articles'):0,
-			'menu_limit'=>($menus->params->get('num_intro_articles'))?$menus->params->get('num_intro_articles'):0,	
-			'num_columns'=>$menus->params->get('num_columns',1),		
+			'menu_limit'=>($menus->params->get('num_intro_articles'))?$menus->params->get('num_intro_articles'):0,
+			'num_columns'=>$menus->params->get('num_columns',1),
 			'cat_id'=>(isset($menus->query['id']))?$menus->query['id']:0,
 			'menu_layout'=>($menus->params->get('layout_type'))?$menus->params->get('layout_type'):0,
 			'load'=>$this->params->get('load'),
+      'loadjquery'=>$this->params->get('loadjquery'),
+      'loadcss'=>$this->params->get('loadcss'),
 			'categorias'=>json_decode($this->params->get('categorias'))
 			);
 
 		if($dinamico['option'] == 'com_content' && $dinamico['view'] == 'category' && $dataTransf['cat_id'] && $dinamico['id'] != $dataTransf['cat_id']){
 			$dataTransf['cat_id'] = $dinamico['id'];
 		}
-		
+
 		if($dataTransf['art_limit'] && $dataTransf['cat_id'] && $dataTransf['menu_layout'] && $dataTransf['menu_limit'] ){
-		
+
 			return $this->Scrtipt($dataTransf);
 		}
 
@@ -74,14 +76,14 @@ class PlgSystemDroideajaxscroll extends JPlugin
 
 private function Scrtipt($data){
 	$doc = JFactory::getDocument();
-	
+
 	$limit = $data['art_limit'];
 	$menu_limit = $data['menu_limit'];
 	$menuparans = $data['menuparans'];
 	$catid = $data['cat_id'];
 	$nColunas = $data['num_columns'];
 	$blocoparam = $data['blocoparam'];
-	$loadurl = JUri::base(true).'/'.$data['load']; 
+	$loadurl = JUri::base(true).'/'.$data['load'];
 	$script = <<<html
 
 	and = jQuery.noConflict();
@@ -97,23 +99,21 @@ private function Scrtipt($data){
 					if(and(window).scrollTop() > heightbox &&  and(window).scrollTop() < heightlimit )
 	   				 {
 
-	   				 	console.log('ok'+heightlimit);
-						
 	   				 	loadposition = and('$blocoparam').width() / 2;
 	   				 	and.ajax({
 	   				 		dataType:'json',
 	   				 		method: 'GET',
 	   				 		data:{start:and('body').data('transf'),colunas:$nColunas,menuparans:$menuparans},
-	   				 		url:"index.php?Next4Ajax=json&cat_id=$catid&limit=$limit&menu_limit=$menu_limit",
-	   				 		beforeSend:function(){ 
+	   				 		url:"index.php?droide-ajax=json&cat_id=$catid&limit=$limit&menu_limit=$menu_limit",
+	   				 		beforeSend:function(){
 
-	   				 			and('$blocoparam').append("<div id='load' class='nextloadscroll' style='left:"+loadposition+"px;' ><img style='border:10px solid #ff0000;' width='250' src='$loadurl'/></div>"); 
+	   				 			and('$blocoparam').append("<div id='load' class='droideajaxscroll' style='left:"+loadposition+"px;' ><img style='border:10px solid #ff0000;' width='250' src='$loadurl'/></div>");
 
 	   				 		},
 	   				 		success:function(data){
-	   				 			and('#load').remove(); 
+	   				 			and('#load').remove();
 	   				 			if(data){
-		   				 			and('$blocoparam').append(data.layout); 
+		   				 			and('$blocoparam').append(data.layout);
 		   				 			and('body').data('transf', (and('body').data('transf')+data.total));
 		   				 			//alert(and('body').data('transf'));
 	   				 			}
@@ -125,13 +125,20 @@ private function Scrtipt($data){
 
 
 		},1000);
-		
+
 
 	});
-		
+
 html;
 
-$doc->addStyleSheet("media/plg_system_nextcontentscroll/css/stylescroll.css");
+if($data['loadjquery']){
+  $doc->addScript("media/plg_system_droideajaxscroll/assets/js/jquery-3.1.0.min.js");
+}
+
+if($data['loadcss']){
+    $doc->addStyleSheet("media/plg_system_droideajaxscroll/assets/css/stylescroll.css");
+}
+
 $doc->addScriptDeclaration($script);
 
 
@@ -170,10 +177,10 @@ private function verificaCat($data){
 			if(in_array($v, $filhosCat)){
 				return true;
 			}
-		}	
+		}
 	}
 
-	
+
 	//retorna falso se nenhuma for verdadeira
 	return false;
 
@@ -190,21 +197,20 @@ public function onAfterRoute()
 			return;
 		}
 
-		if(JRequest::getVar('Next4Ajax')){
+		if(JRequest::getVar('droide-ajax')){
+			if(JRequest::getVar('droide-ajax') == 'json'){
 
-			if(JRequest::getVar('Next4Ajax') == 'json'){
-				
 				$items = array();
 
 				$retorno = array();
 
 				if(JRequest::getVar('cat_id',0) && JRequest::getVar('limit',0) &&  JRequest::getVar('menu_limit',0)){
-					
+
 					$catid 		= JRequest::getVar('cat_id',0);
 					$start 		= JRequest::getVar('start',0);
 					$limit 		= JRequest::getVar('limit',0);
 					$menu_limit = JRequest::getVar('menu_limit',0);
-					
+
 					$colunas 	= JRequest::getVar('colunas',1);
 					$menuparans = JRequest::getVar('menuparans',0);
 					require_once __DIR__ . '/helper.php';
@@ -213,8 +219,8 @@ public function onAfterRoute()
 				}
 
 				$retorno['total'] = count($items);
-				$retorno['layout'] = JLayoutHelper::render($this->params->get('layoutbloco'), array('data'=>$items, 'col'=>$colunas), JPATH_SITE .'/plugins/system/nextcontentscroll/tmpl/');
-				
+				$retorno['layout'] = JLayoutHelper::render($this->params->get('layoutbloco'), array('data'=>$items, 'col'=>$colunas), JPATH_SITE .'/plugins/system/droideajaxscroll/tmpl/');
+
 				$doc->setMimeEncoding('application/json');
 				JResponse::setHeader('Content-Disposition','attachment;filename="progress-report-results.json"');
 				echo json_encode($retorno);
@@ -225,7 +231,7 @@ public function onAfterRoute()
 				$items = array();
 
 				if(JRequest::getVar('cat_id',0) && JRequest::getVar('limit',0)){
-					
+
 					$catid = JRequest::getVar('cat_id',0);
 					$limit =  JRequest::getVar('limit',0);
 					$start = JRequest::getVar('start',0);
@@ -239,9 +245,9 @@ public function onAfterRoute()
 
 					echo $items;
 
-				
+
 				$app->close();
-				
+
 
 			}
 
@@ -252,5 +258,5 @@ public function onAfterRoute()
 	}
 
 
-	
+
 }
