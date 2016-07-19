@@ -37,11 +37,7 @@ class PlgSystemDroideajaxscroll extends JPlugin
 
 		if($dinamico['option'] == 'com_content' && $dinamico['view'] == 'category'):
 
-
-
 		$menus = $app->getMenu()->getActive();
-
-
 
 		$elementos_dinamicos = array();
 
@@ -197,22 +193,22 @@ public function onAfterRoute()
 			return;
 		}
 
-		if(JRequest::getVar('droide-ajax')){
-			if(JRequest::getVar('droide-ajax') == 'json'){
+		if($app->get('droide-ajax',0,'STRING')){
+			if($app->get('droide-ajax',0,'STRING') == 'json'){
 
 				$items = array();
 
 				$retorno = array();
 
-				if(JRequest::getVar('cat_id',0) && JRequest::getVar('limit',0) &&  JRequest::getVar('menu_limit',0)){
+				if(($app->get('cat_id',0,'INT') && $app->get('limit',0,'INT') &&  $app->get('menu_limit',0,'INT')){
 
-					$catid 		= JRequest::getVar('cat_id',0);
-					$start 		= JRequest::getVar('start',0);
-					$limit 		= JRequest::getVar('limit',0);
-					$menu_limit = JRequest::getVar('menu_limit',0);
+					$catid 		= $app->get('cat_id',0,'INT');
+					$start 		= $app->get('start',0,'INT');
+					$limit 		= $app->get('limit',0,'INT');
+					$menu_limit = $app->get('menu_limit',0,'INT');
 
-					$colunas 	= JRequest::getVar('colunas',1);
-					$menuparans = JRequest::getVar('menuparans',0);
+					$colunas 	= $app->get('colunas',1,'INT');
+					$menuparans = $app->get('menuparans',0,'STRING');
 					require_once __DIR__ . '/helper.php';
 
 					$items = BlogHelper::getList($start,$limit,$catid,$menuparans,$menu_limit);
@@ -230,13 +226,13 @@ public function onAfterRoute()
 
 				$items = array();
 
-				if(JRequest::getVar('cat_id',0) && JRequest::getVar('limit',0)){
+				if($app->get('cat_id',0) && $app->get('limit',0)){
 
-					$catid = JRequest::getVar('cat_id',0);
-					$limit =  JRequest::getVar('limit',0);
-					$start = JRequest::getVar('start',0);
-					$colunas = JRequest::getVar('colunas',1);
-					$menuparans = JRequest::getVar('menuparans',0);
+					$catid = $app->get('cat_id',0,'INT');
+					$limit =  $app->get('limit',0,'INT');
+					$start = $app->get('start',0,'INT');
+					$colunas = $app->get('colunas',1,'INT');
+					$menuparans = $app->get('menuparans',0,'STRING');
 					require_once __DIR__ . '/helper.php';
 
 					$items = BlogHelper::getList($start,$limit,$catid,$menuparans);
