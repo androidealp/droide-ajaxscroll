@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.0.0" type="plugin" group="system" method="upgrade">
-	<name>droideajaxscroll_NAME</name>
+	<name>DROIDEAJAXSCROLL_NAME</name>
 	<creationDate>Abril 2015</creationDate>
 	<author>André Luiz</author>
 	<authorEmail>and4563@gmail.com</authorEmail>
@@ -9,14 +9,14 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<version>1.0</version>
 	<description>
-		droideajaxscroll_DESC
+		DROIDEAJAXSCROLL_DESC
 	</description>
 	<files>
 		<filename plugin="droideajaxscroll">droideajaxscroll.php</filename>
         <filename>index.html</filename>
         <filename>helper.php</filename>
         <folder>language</folder>
-        <folder>js</folder>
+        <folder>assets</folder>
         <folder>tmpl</folder>
 	</files>
   <media folder="media" destination="plg_system_droideajaxscroll">
@@ -31,19 +31,27 @@
     <config>
         <fields name="params">
             <fieldset name="basic">
-              <field name="load" label="droideajaxscroll_IMG" type="media" directory="" />
-              <field name="blocoparam" type="text" default="[data-next4-scroll]" label="droideajaxscroll_PARAM" description="droideajaxscroll_DESC_PARAM" size="10" />
+              <field name="loadjquery" type="radio" default="0" label="DROIDEAJAXSCROLL_LOADJQUERY" description="DROIDEAJAXSCROLL_LOADJQUERY_DESC">
+                <option value="0">NO</option>
+                <option value="1">YES</option>
+              </field>
+              <field name="loadcss" type="radio" default="0" label="DROIDEAJAXSCROLL_LOADCSS" description="DROIDEAJAXSCROLL_LOADCSS_DESC">
+                <option value="0">NO</option>
+                <option value="1">YES</option>
+              </field>
+              <field name="load" label="DROIDEAJAXSCROLL_IMG" type="media" directory="" />
+              <field name="blocoparam" type="text" default="[data-next4-scroll]" label="DROIDEAJAXSCROLL_PARAM" description="DROIDEAJAXSCROLL_DESC_PARAM" size="10" />
 
-              <field name="layoutbloco" type="filelist" default="" label="droideajaxscroll_DESC_LAYOUT" description="droideajaxscroll_DESC_DESC_L" directory="plugins/system/droideajaxscroll/tmpl" filter="" exclude="" stripext="true" />
+              <field name="layoutbloco" type="filelist" default="" label="DROIDEAJAXSCROLL_DESC_LAYOUT" description="DROIDEAJAXSCROLL_DESC_DESC_L" directory="plugins/system/droideajaxscroll/tmpl" filter="" exclude="" stripext="true" />
                 <field name="categorias"
                   type="Repeatable"
                   icon="list"
-                  description="droideajaxscroll_DESC_CAT"
-                  label="droideajaxscroll_LABEL_CAT"
+                  description="DROIDEAJAXSCROLL_DESC_CAT"
+                  label="DROIDEAJAXSCROLL_LABEL_CAT"
                   default="">
                   <fields name="params">
                   <fieldset hidden="true" name="categorias_modal" repeat="true">
-                    <field name="categoria" type="category" extension="com_content" label="droideajaxscroll_SUB_CAT" description="" />
+                    <field name="categoria" type="category" extension="com_content" label="DROIDEAJAXSCROLL_SUB_CAT" description="" />
                   </fieldset>
                   </fields>
                 </field>
