@@ -26,12 +26,12 @@ class PlgSystemDroideajaxscroll extends JPlugin
 		    return;
 		}
 
-		$temp   = JRequest::getString('id');
+		$temp   = $app->get('id',0,'INT');
 		$temp   = explode(':', $temp);
 
 		$dinamico = array(
-				'option' => JRequest::getCmd('option'),
-				'view'	 => JRequest::getCmd('view'),
+				'option' => $app->get('option',0,'STRING'),
+				'view'	 => $app->get('view',0,'STRING'),
 				'id'   	 => $temp[0]
 			);
 
@@ -200,7 +200,7 @@ public function onAfterRoute()
 
 				$retorno = array();
 
-				if(($app->get('cat_id',0,'INT') && $app->get('limit',0,'INT') &&  $app->get('menu_limit',0,'INT')){
+				if($app->get('cat_id',0,'INT') && $app->get('limit',0,'INT') &&  $app->get('menu_limit',0,'INT')){
 
 					$catid 		= $app->get('cat_id',0,'INT');
 					$start 		= $app->get('start',0,'INT');
